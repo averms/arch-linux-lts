@@ -1,0 +1,24 @@
+name: GitHub CI
+
+on:
+  push:
+    branches: [changes]
+  workflow_dispatch:
+
+jobs:
+  build-kernel:
+    runs-on: ubuntu-20.04
+    container: docker.io/library/archlinux:base-devel
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build with makepkg
+        run: |
+          pacman -Sqyu --noconfirm --needed pacman
+          pacman -Sqyu --noconfirm --needed sudo bc kmod libelf pahole cpio perl tar xz
+          useradd -m builder
+          chown -R builder: ./
+          su builder -c 'cd repos/core-x86_64/ && makepkg -Cf --skippgpcheck --noconfirm'
+      - uses: actions/upload-artifact@v2
+        with:
+          name: my-linux-lts
+          path: repos/core-x86_64/linux-lts-aman*.pkg.tar.zst
