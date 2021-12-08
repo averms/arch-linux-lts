@@ -1,6 +1,6 @@
 # Maintainer: Andreas Radke <andyrtr@archlinux.org>
 
-pkgbase=linux-lts
+pkgbase=linux-lts-aman
 pkgver=5.15.49
 pkgrel=1
 pkgdesc='LTS Linux'
